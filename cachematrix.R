@@ -1,15 +1,53 @@
-## Put comments here that give an overall description of what your
-## functions do
+# This is like... fake object orientation. 
+# could you make the solving function part of the cacheMatrix?
 
-## Write a short comment describing this function
+## Creates an object that can return a given matrix, 
+# and cache the matrix's inverse after it's calculated for the first time.
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(mx = matrix()) {
+  # mx is the matrix that was passed in. Retrieved with get()
+  # inv is the inverse of the matrix. Initially set to null, then saved after the first time we call cacheSolve
+  inv<-NULL
+# I kept set() because it was present in the template function... but nothing ever calls it.
+# seems like a bad feature because it lets you change the matrix, while possibly retaining an incorrect cached inverse.
+  set<-function(y) {
+    mx<<-y
+  }
+# get() returns the matrix. It's the equivalent of simply evaluating the variable if it were a regular matrix.
+get<-function() {
+    return(mx)
+  }
+# Call from outside to set the cached inverse. 
+# Note that the <<- operator must be used because inv exists in the calling environment.
+  setinv<-function(i) inv<<-i
+  getinv<-function() return(inv)
+  return(list(setinv=setinv, getinv=getinv, set=set, get=get))
 }
 
-
-## Write a short comment describing this function
+##cacheSolve(x) takes a cacheMatrix and retrieves the inverse if it was saved in i, or calculates it and caches it in i
 
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+# this will retrieve the cached inverse, or NULL if it was never calculated.
+  i<-x$getinv()
+
+  if(!is.null(i)) {
+    print("returning cached inverse")
+    return(i)
+  }
+  else {
+    print("calculating inverse")
+    mx<-x$get()
+    i<-solve(mx)
+    x$setinv(i)
+    return(x$getinv())
+  }        
+}
+
+mxTest<-function() {
+# just an easy way to test whether I messed anything up in the code above. 
+  o<-makeCacheMatrix(matrix(c(3,0,0,0,1,2,0,0,0,0,2,0,0,0,0,2), ncol=4))
+# should calculate
+  cacheSolve(o)
+# should retrieve
+  cacheSolve(o)
 }
