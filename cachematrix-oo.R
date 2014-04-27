@@ -1,6 +1,11 @@
 # just fooling around, wondering whether you can have the solve function in the cachematrix "object". 
 # answer: yes, but there's no real reason to.
 
+### NOTE:
+# This is not my canonical solution to the assignment. For that, see "cachematrix.R"
+###
+
+
 makeCacheMatrix <- function(mx = matrix()) {
   # mx is the matrix that was passed in. Retrieved with get()
   # inv is the inverse of the matrix. Initially set to null, then saved after the first time we call cacheSolve
